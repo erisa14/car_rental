@@ -1,0 +1,33 @@
+{% extends "cars/base.html" %}
+
+{% block title %}{{ car.brand }} {{ car.model }}{% endblock %}
+
+{% block content %}
+    <div class="car-detail">
+        <h2>{{ car.brand }} {{ car.model }}</h2>
+        {% if car.image %}
+            <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}">
+        {% else %}
+            <div class="no-image">No image available</div>
+        {% endif %}
+        <p><strong>Year:</strong> {{ car.year }}</p>
+        <p><strong>Price per day:</strong> ${{ car.price_per_day }}</p>
+        <p><strong>License Plate:</strong> {{ car.license_plate }}</p>
+        {% if user.is_authenticated %}
+            <a href="{% url 'rent_car' car.id %}" class="btn">Rent this Car</a>
+        {% else %}
+            <p>You must <a href="{% url 'login' %}">log in</a> to rent a car.</p>
+        {% endif %}
+        <a href="{% url 'car_list' %}" class="btn">Back to Cars</a>
+    </div>
+
+    {% if messages %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                {% for message in messages %}
+                    alert("{{ message }}");
+                {% endfor %}_
+            });
+        </script>
+    {% endif %}
+{% endblock %}

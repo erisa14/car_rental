@@ -1,0 +1,43 @@
+{% extends "cars/base.html" %}
+
+{% block title %}Rent {{ car.brand }} {{ car.model }}{% endblock %}
+
+{% block content %}
+    <h2>Rent the car: {{ car.brand }} {{ car.model }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <p>
+            Rental Date:
+            <input type="date" name="rental_date" id="rental_date" data-reserved='{{ reserved_dates|safe }}'>
+        </p>
+        <p>
+            Return Date:
+            <input type="date" name="return_date" id="return_date" data-reserved='{{ reserved_dates|safe }}'>
+        </p>
+        <button type="submit">Reserve</button>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let rentalInput = document.querySelector("[name='rental_date']");
+            let returnInput = document.querySelector("[name='return_date']");
+            let reservedDates = JSON.parse('{{ reserved_dates|safe }}');
+
+            function disableReservedDates(input) {
+                input.addEventListener("input", function () {
+                    let selectedDate = this.value;
+                    if (reservedDates.includes(selectedDate)) {
+                        alert("This date is already booked. Please choose another date.");
+                        this.value = "";
+                    }
+                });
+            }
+
+            disableReservedDates(rentalInput);
+            disableReservedDates(returnInput);
+        });
+    </script>
+
+
+{% endblock %}
+

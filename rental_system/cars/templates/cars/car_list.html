@@ -1,0 +1,24 @@
+{% extends "cars/base.html" %}
+
+{% block title %}Available Cars{% endblock %}
+
+{% block content %}
+    <h2>Available Cars</h2>
+    <div class="car-grid">
+        {% for car in cars %}
+            <div class="car-card">
+                {% if car.image %}
+                    <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}">
+                {% else %}
+                    <div class="no-image">No image available</div>
+                {% endif %}
+                <div class="car-info">
+                    <h3>{{ car.brand }} {{ car.model }}</h3>
+                    <p>Year: {{ car.year }}</p>
+                    <p>Price: ${{ car.price_per_day }}/day</p>
+                    <a href="{% url 'car_detail' car.id %}" class="btn">View Details</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

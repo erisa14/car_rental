@@ -1,0 +1,28 @@
+{% extends "cars/base.html" %}
+
+{% block title %}Your Reservations{% endblock %}
+
+{% block content %}
+  <h2>Your Reservations</h2>
+  
+  {% if reservations %}
+    <ul>
+      {% for reservation in reservations %}
+        <li>
+          <p>Car: {{ reservation.car.brand }} {{ reservation.car.model }}</p>
+          <p>Rental Date: {{ reservation.rental_date }}</p>
+          <p>Return Date: {{ reservation.return_date }}</p>          
+          {% if not reservation.is_cancelled %}
+            <form action="{% url 'cancel_reservation' rental_id=reservation.id %}" method="POST">
+              {% csrf_token %}
+              <button type="submit">Cancel Reservation</button>
+            </form>
+          {% endif %}
+          <a href="{% url 'reservation_detail' rental_id=reservation.id %}" class="btn">View Details</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You have no active reservations.</p>
+  {% endif %}
+{% endblock %}

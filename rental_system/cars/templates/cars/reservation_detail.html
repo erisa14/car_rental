@@ -1,0 +1,35 @@
+{% extends "cars/base.html" %}
+
+{% block title %}Reservation Detail{% endblock %}
+
+
+{% block content %}
+    <div class="car-detail"> <!-- Reusing car-detail class for consistency -->
+        <h2>Reservation Details</h2>
+        <img src="{{ reservation.car.image.url }}" alt="{{ reservation.car.brand }} {{ reservation.car.model }}">
+        <p><strong>Car:</strong> {{ reservation.car.brand }} {{ reservation.car.model }}</p>
+        <p><strong>Rental Date:</strong> {{ reservation.rental_date }}</p>
+        <p><strong>Return Date:</strong> {{ reservation.return_date }}</p>
+    
+        {% if not reservation.is_cancelled %}
+            <form action="{% url 'cancel_reservation' rental_id=reservation.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn">Cancel Reservation</button>
+            </form>
+        {% else %}
+            <p class="cancelled-notice">This reservation has already been cancelled.</p>
+        {% endif %}
+
+        <a href="{% url 'user_reservations' %}" class="btn">Back to Reservations</a>
+    </div>
+
+    {% if messages %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% for message in messages %}
+                alert("{{ message }}");
+            {% endfor %}_
+        });
+    </script>
+{% endif %}
+{% endblock %}

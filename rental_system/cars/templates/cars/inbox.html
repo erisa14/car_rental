@@ -1,0 +1,25 @@
+{% extends "cars/base.html" %}
+
+{% block title %}Inbox{% endblock %}
+
+{% block content %}
+    <h2>Inbox</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="inbox-message">
+                <strong>{{ message.timestamp|date:"Y-m-d H:i" }}</strong> - 
+                {{ message.content }}
+
+                {% if not message.read %}
+            <span class="unread">Unread</span>
+            <!-- Formë për ta bërë mesazhin të lexuar -->
+            <a href="{% url 'mark_as_read' message.id %}">Mark as Read</a>
+        {% else %}
+            <span class="read">Read</span>
+        {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No messages.</p>
+    {% endif %}
+{% endblock %}
